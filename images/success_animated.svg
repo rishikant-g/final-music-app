@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="115" height="115" viewBox="0 0 115 115" style="">
+  <g id="Group_35" data-name="Group 35" transform="translate(-6374 -7491)">
+    <g id="Ellipse_1" data-name="Ellipse 1" transform="translate(6374 7491)" fill="#eefff3" stroke="#0d8b37" stroke-width="4">
+      <path stroke="none" d="M0,57.5A57.5,57.5 0,1,1 115,57.5A57.5,57.5 0,1,1 0,57.5" class="YDSxEIYf_0"></path>
+      <path fill="none" d="M2,57.5A55.5,55.5 0,1,1 113,57.5A55.5,55.5 0,1,1 2,57.5" class="YDSxEIYf_1"></path>
+    </g>
+    <path id="Union_1" data-name="Union 1" d="M0,16.317,16.728,33.438ZM49.531,0,16.816,33.393Z" transform="translate(6406.5 7531.5)" fill="none" stroke="#0d8b37" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" class="YDSxEIYf_2"></path>
+  </g>
+<style data-made-with="vivus-instant">.YDSxEIYf_0{stroke-dasharray:362 364;stroke-dashoffset:363;animation:YDSxEIYf_draw 1000ms ease-in-out 0ms forwards;}.YDSxEIYf_1{stroke-dasharray:349 351;stroke-dashoffset:350;animation:YDSxEIYf_draw 1000ms ease-in-out 0ms forwards;}.YDSxEIYf_2{stroke-dasharray:142 144;stroke-dashoffset:143;animation:YDSxEIYf_draw 1000ms ease-in-out 0ms forwards;}@keyframes YDSxEIYf_draw{100%{stroke-dashoffset:0;}}@keyframes YDSxEIYf_fade{0%{stroke-opacity:1;}92.3076923076923%{stroke-opacity:1;}100%{stroke-opacity:0;}}</style></svg>
