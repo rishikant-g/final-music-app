@@ -24,6 +24,8 @@ pakka.addBinder('bind-showhide', function(el, prop, context) {
 });
 
 
+
+
 pakka.addBinder('bind-singers-formatted', function(el, prop, context) {
     return function(value) {
         el.innerHTML = _arrayToString(value);
@@ -95,6 +97,7 @@ var songListItemComponent = pakka({
         }
 
         context.edit = function(event) {
+            pakka.addClass(document.getElementById("update-singer-modal"), "showmodal");
             app.$get("udpateSinger").$set("songIdx", musicPlayer.songsList().indexOf(context));
             app.$get("udpateSinger").$set("songData", context.$get('songData'));
             //app.$get("udpateSinger").$set("parentContext", context);
@@ -122,6 +125,7 @@ var songListItemComponent = pakka({
         context.$watch('songData', function(songData) {
             if (context != undefined && context.$get('songDetail') != undefined)
                 context.$get('songDetail').$set('songData', songData);
+
         })
     }
 });
@@ -133,6 +137,9 @@ var songListItemDetailComponent = pakka({
 
     }
 });
+
+
+
 
 
 // Static data
@@ -155,23 +162,22 @@ var initialSongData = [{
 // Creating a new component as form 
 var newSongComponent = pakka({
     name: 'new-song-component',
-    html: '<div id="myModal" class="modal">' +
+    html: '<div id="addNewSongModal" class="modal">' +
         '<div class="modal-content">' +
         '<div class="modal-header">' +
-        '<span class="close">&times;</span>' +
+        '<span class="close" click-handle="closeModalBtn">&times;</span>' +
         '<h2>Add a song</h2>' +
         '</div>' +
         '<div class="modal-body text-center">' +
-        '<input class="form-control" type="text" placeholder="Enter song name" bind-property="songData.name" /><br /><input class="form-control" type="text" placeholder="Enter album name" bind-property="songData.album" />' +
-        '<br /><input class="form-control" type="text" placeholder="Enter singer name" bind-property="songData.singers" /> <button click-handle="addSong" class="modal-song-btn">Add</button>' +
+        '' +
+        '<input class="form-control" type="text" placeholder="Enter song name" bind-property="songData.name" /><br />' +
+        '<input class="form-control" type="text" placeholder="Enter album name" bind-property="songData.album" /> <br />' +
+        '<input class="form-control" type="text" placeholder="Enter singer name" bind-property="songData.singers" />' +
+        '<button click-handle="addSong" class="modal-song-btn">Add</button>' +
+        '' +
         '</div>' +
-        '</div></div>' +
-        '<div id="successModal" class="modal">' +
-        '<div class="modal-content">' +
-        '<div class="modal-body text-center">' +
-        '<img src="images/success_animated.svg"><br><h2>Song has been added in the list</h2>' +
         '</div>' +
-        '</div></div>',
+        '</div>',
     controller: function(context) {
         event && event.preventDefault();
         context.addSong = function(event) {
@@ -181,14 +187,19 @@ var newSongComponent = pakka({
                 item.$set('songData', Object.assign({}, musicPlayer.newSong().$get('songData')));
                 musicPlayer.songsList().push(item);
                 app.$set('songsList', musicPlayer.songsList());
-                closeFormModal("myModal");
-                showModal();
-                setTimeout(function() {
-                    closeFormModal("successModal");
-                }, 2000);
+                //  pakka.removeClass(document.getElementById("addNewSongModal"), "showmodal");
 
+                pakka.addClass(document.getElementById("successModal"), "showmodal");
+                setTimeout(function() {
+                    pakka.removeClass(document.getElementById("successModal"), "showmodal");
+                    pakka.removeClass(document.getElementById("addNewSongModal"), "showmodal");
+                }, 2000);
             }
-            reInitModal();
+        }
+
+        context.closeModalBtn = function(event) {
+            pakka.removeClass(document.getElementById("addNewSongModal"), "showmodal");
+            pakka.addClass(document.getElementById("addNewSongModal"), "hidemodal");
         }
 
     },
@@ -202,15 +213,21 @@ var updateSingerComponent = pakka({
         // event.preventDefault();
         context.update = function(event) {
             pakka.apply(musicPlayer.songsList()[context.$get("songIdx")], 'songData', context.$get("songData"));
-            closeUpdateSingerModal("update-singer-modal");
-            showUpdateSingerModal();
+            pakka.addClass(document.getElementById("success-singer-Modal"), "showmodal");
             setTimeout(function() {
-                closeSuccessSingerModal("success-singer-Modal");
+                pakka.removeClass(document.getElementById("success-singer-Modal"), "showmodal");
+                pakka.removeClass(document.getElementById("update-singer-modal"), "showmodal");
             }, 2000);
 
+
+        }
+
+        context.closeUpdateSingerModal = function() {
+            pakka.removeClass(document.getElementById("update-singer-modal"), "showmodal");
         }
     },
 });
+
 
 
 
@@ -224,6 +241,20 @@ var musicPlayer = {
         musicPlayer.nowPlaying().$set("isPlaying", true);
     }
 };
+
+
+
+app.showAddSongModal = function(event) {
+    console.log('1');
+    pakka.removeClass(document.getElementById("addNewSongModal"), "hidemodal");
+    pakka.addClass(document.getElementById("addNewSongModal"), "showmodal");
+}
+
+
+
+
+
+
 
 function init() {
     // Looping through static data to bind text on song list component
@@ -248,112 +279,3 @@ _arrayToString = function arrayToString(value) {
         return value;
     }
 }
-
-var modal = document.getElementById("myModal");
-var btn = document.getElementById("myBtn");
-var span = document.getElementsByClassName("close")[0];
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-span.onclick = function() {
-    modal.style.display = "none";
-}
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-var modal1 = document.getElementById("update-singer-modal");
-
-var span = document.getElementsByClassName("close-update-singer")[0];
-function reInitModal() {
-    for (var i = 0; i < document.getElementsByClassName("edit_singer_btn").length; i++) {
-        btn = document.getElementsByClassName("edit_singer_btn")[i];
-        btn.onclick = function () {
-            modal1.style.display = "block";
-        }
-    }
-}
-span.onclick = function() {
-    modal1.style.display = "none";
-}
-window.onclick = function(event) {
-    if (event.target == modal1) {
-        modal1.style.display = "none";
-    }
-}
-
-
-// Fuction for clsogin form  modal
-function closeFormModal(modalId) {
-
-    // get modal
-    const modal = document.getElementById(modalId);
-
-    // change state like in hidden modal
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('style', 'display: none');
-    ("modal-body")[0].innerHTML = "";
-    // get modal backdrop
-    const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-}
-
-
-function showModal() {
-    var modal = document.getElementById("successModal");
-    modal.style.display = "block";
-}
-
-// Fuction success closing modal
-function closeSuccessModal(modalId) {
-
-    // get modal
-    const modal = document.getElementById(modalId);
-
-    // change state like in hidden modal
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('style', 'display: none');
-    const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-}
-
-
-//Close Update Singer Modal
-function closeUpdateSingerModal(modalId) {
-
-    // get modal
-    const modal = document.getElementById(modalId);
-
-    // change state like in hidden modal
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('style', 'display: none');
-    // get modal backdrop
-    const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-}
-
-
-
-
-
-function showUpdateSingerModal() {
-    var modal = document.getElementById("success-singer-Modal");
-    modal.style.display = "block";
-}
-
-
-// Fuction success closing modal
-function closeSuccessSingerModal(modalId) {
-
-    // get modal
-    const modal = document.getElementById(modalId);
-
-    // change state like in hidden modal
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('style', 'display: none');
-    const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-}
-reInitModal();
